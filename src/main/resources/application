@@ -1,0 +1,19 @@
+server:
+  port: 8080
+
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/demo_db
+    username: postgres
+    password: password
+
+  jpa:
+    show-sql: true
+    driverClassName: org.hibernate.dialect.PostgreSQL81Dialect
+    hibernate.ddl-auto: validate
+
+
+#  ## Flyway config
+#  flyway:
+#    baseline-version: 1
+#    baseline-on-migrate: true
