@@ -10,8 +10,6 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.context.ActiveProfiles;
 
-import java.sql.SQLException;
-
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 
@@ -36,7 +34,7 @@ public class AuthorDaoIntegrationTest {
     }
 
     @Test
-    void testGetAuthorByName() throws SQLException {
+    void testGetAuthorByName() {
         Author author = authorDao.findAuthorByName("Brian", "Tracy");
 
         assertThat(author).isNotNull();

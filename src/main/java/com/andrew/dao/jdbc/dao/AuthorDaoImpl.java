@@ -18,11 +18,12 @@ public class AuthorDaoImpl implements AuthorDao {
         this.dataSource = dataSource;
     }
 
+    Connection connection = null;
+    PreparedStatement ps = null;
+    ResultSet resultSet = null;
+
     @Override
     public Author getById(Long id) {
-        Connection connection = null;
-        PreparedStatement ps = null;
-        ResultSet resultSet = null;
 
         try {
             connection = dataSource.getConnection();
@@ -49,10 +50,7 @@ public class AuthorDaoImpl implements AuthorDao {
     }
 
     @Override
-    public Author findAuthorByName(String firstName, String lastName) throws SQLException {
-        Connection connection = null;
-        PreparedStatement ps = null;
-        ResultSet resultSet = null;
+    public Author findAuthorByName(String firstName, String lastName) {
 
         try {
             connection = dataSource.getConnection();
