@@ -27,6 +27,45 @@ public class AuthorDaoIntegrationTest {
     AuthorDao authorDao;
 
     @Test
+    void testDeleteAuthor() {
+        Author author = new Author();
+        author.setFirstName("John");
+        author.setLastName("M");
+
+        Author saved = authorDao.saveNewAuthor(author);
+
+        authorDao.deleteAuthor(saved.getId());
+
+        Author deleted = authorDao.getById(saved.getId());
+
+        assertThat(deleted).isNull();
+    }
+
+    @Test
+    void testUpdateAuthor() {
+        Author author = new Author();
+        author.setFirstName("John");
+        author.setLastName("M");
+
+        Author saved = authorDao.saveNewAuthor(author);
+
+        saved.setLastName("Mark");
+        Author updated = authorDao.updateAuthor(saved);
+
+        assertThat(updated.getLastName()).isEqualTo("Mark");
+    }
+
+    @Test
+    void testSaveAuthor() {
+        Author author = new Author();
+        author.setFirstName("Andrew");
+        author.setLastName("Jones");
+        Author saved = authorDao.saveNewAuthor(author);
+
+        assertThat(saved).isNotNull();
+    }
+
+    @Test
     void testGetAuthor() {
         Author author = authorDao.getById(1L);
 

@@ -78,6 +78,86 @@ public class AuthorDaoImpl implements AuthorDao {
         return null;
     }
 
+    @Override
+    public Author saveNewAuthor(Author author) {
+
+        try {
+            connection = dataSource.getConnection();
+            ps = connection.prepareStatement("INSERT INTO author (first_name, last_name) " + "VALUES (?, ?)");
+            ps.setString(1, author.getFirstName());
+            ps.setString(2, author.getLastName());
+            ps.executeUpdate();
+
+            Statement statement = connection.createStatement();
+
+//            resultSet = statement.executeQuery("SELECT LAST_INSERT_ID()"); // This method only works for mysql (checkout the PostgresSQL equivalent)
+
+            resultSet = statement.executeQuery("SELECT max(id) from author");
+
+            if (resultSet.next()) {
+                Long savedId = resultSet.getLong(1);
+
+                return this.getById(savedId);
+            }
+            statement.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                closeAll(resultSet, ps, connection);
+
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return null;
+    }
+
+    @Override
+    public Author updateAuthor(Author author) {
+
+        try {
+            connection = dataSource.getConnection();
+            ps = connection.prepareStatement("UPDATE author set first_name = ?,  last_name = ? where author.id = ?");
+            ps.setString(1, author.getFirstName());
+            ps.setString(2, author.getLastName());
+            ps.setLong(3, author.getId());
+            ps.executeUpdate();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                closeAll(resultSet, ps, connection);
+
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return this.getById(author.getId());
+    }
+
+    @Override
+    public void deleteAuthor(Long id) {
+        try {
+            connection = dataSource.getConnection();
+            ps = connection.prepareStatement("DELETE from author where id = ?");
+            ps.setLong(1, id);
+            ps.execute();
+
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        } finally {
+            try {
+                closeAll(null, ps, connection);
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
+
     private Author getAuthorFromRS(ResultSet resultSet) throws SQLException {
         Author author = new Author();
         author.setId(resultSet.getLong("id"));
